@@ -10,7 +10,7 @@ public class Main {
 
         System.out.println(toyota);
 
-        Car renault  = Car.builder()
+        Car renault = Car.builder()
                 .brand("Renault")
                 .model("Logan")
                 .year(2024)
