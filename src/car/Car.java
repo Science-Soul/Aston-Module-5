@@ -25,10 +25,10 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Машина {" +
-                "бренд ='" + brand + '\'' +
-                ", модель ='" + model + '\'' +
-                ", год =" + year +
+        return "Машина: {" +
+                "Бренд: " + brand +
+                ", Модель: " + model +
+                ", Год: " + year +
                 '}';
     }
 
