@@ -107,8 +107,8 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     }
 
     /**
-     * Частный метод remove, который пропускает проверку границ
-     * и не возвращает значение removed.
+     * Частный метод remove, который не проверяет границы массива
+     * и не возвращает значения.
      */
     private void fastRemove(Object[] array, int i) {
         final int newSize;
@@ -172,7 +172,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
         Objects.checkIndex(index, size);
         if (size == array.length)
             grow();
-        System.arraycopy(array, index + 1, array, index, size - index);
+        System.arraycopy(array, index, array, index + 1, size - index);
         array[index] = element;
         size++;
     }
@@ -194,8 +194,8 @@ public class CustomArrayList<E> extends AbstractList<E> implements
         int oldCapacity = array.length;
         if (oldCapacity > 0) {
             int newCapacity = LocalArraysSupport.newLength(oldCapacity,
-                    minCapacity - oldCapacity, /* minimum growth */
-                    oldCapacity >> 1           /* preferred growth */);
+                    minCapacity - oldCapacity, /* минимальный прирост */
+                    oldCapacity >> 1           /* желаемый прирост */);
             return array = Arrays.copyOf(array, newCapacity);
         } else {
             return array = new Object[Math.max(DEFAULT_CAPACITY, minCapacity)];
