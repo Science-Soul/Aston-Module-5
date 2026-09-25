@@ -1,5 +1,13 @@
 package util;
 
+/**
+ * Класс, который переносит необходимые методы из
+ * jdk.util.ArraysSupport.<p>
+ * Иначе для его использования необходимо было бы прописать каждому в настройках компилятора <p>
+ * '--add-exports java.base/jdk.internal.util=ALL-UNNAMED' <p>
+ * потому что пакет не предназначен для использования в пользовательском коде,
+ * так как его поведение может меняться в версиях JDK, а доступ к нему не гарантирован
+ */
 public class LocalArraysSupport {
 
     /**
@@ -12,7 +20,7 @@ public class LocalArraysSupport {
      * Integer.MAX_VALUE, даже если достаточно разрешенной памяти в куче. Фактический предел
      * может зависеть от специфичных для некоторых реализаций JVM характеристик, таких как
      * размер заголовка объекта. Допустимое максимальное значение выбрано консервативно, чтобы
-     * чтобы быть меньше любого предела реализации, с которым можно столкнуться.
+     * быть меньше любого предела реализации, с которым можно столкнуться.
      */
     public static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
 
@@ -67,7 +75,7 @@ public class LocalArraysSupport {
 
     private static int hugeLength(int oldLength, int minGrowth) {
         int minLength = oldLength + minGrowth;
-        if (minLength < 0) { // overflow
+        if (minLength < 0) { // переполнение
             throw new OutOfMemoryError(
                     "Необходимый размер массива " + oldLength + " + " + minGrowth + " слишком велик");
         } else return Math.max(minLength, SOFT_MAX_ARRAY_LENGTH);

@@ -1,8 +1,5 @@
 import car.Car;
-import util.CustomArrayList;
-
-import java.util.ArrayList;
-import java.util.List;
+import test.Test;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,14 +19,6 @@ public class Main {
 
         System.out.println(renault);
 
-        List<Car> example = List.of(toyota, renault);
-        List<Car> cust = new CustomArrayList<>(example);
-        List<Car> def = new ArrayList<>(example);
-        System.out.println(def);
-        System.out.println(cust);
-        System.out.println(def.equals(cust));
-        for (Car car : cust) {
-            System.out.println(car);
-        }
+        Test.testCustomArrayList();
     }
 }
