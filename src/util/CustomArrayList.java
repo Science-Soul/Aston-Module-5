@@ -156,16 +156,6 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     }
 
     @Override
-    public E getFirst() {
-        return arrayElement(0);
-    }
-
-    @Override
-    public E getLast() {
-        return arrayElement(size-1);
-    }
-
-    @Override
     public E set(int index, E element) {
         E old = arrayElement(index);
         array[index] = element;
@@ -188,31 +178,11 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     }
 
     @Override
-    public void addFirst(E e) {
-        add(0, e);
-    }
-
-    @Override
-    public void addLast(E e) {
-        add(size, e);
-    }
-
-    @Override
     public E remove(int index) {
         Objects.checkIndex(index, size);
         E old = arrayElement(index);
         fastRemove(array, index);
         return old;
-    }
-
-    @Override
-    public E removeFirst() {
-        return remove(0);
-    }
-
-    @Override
-    public E removeLast() {
-        return remove(size-1);
     }
 
     @Override

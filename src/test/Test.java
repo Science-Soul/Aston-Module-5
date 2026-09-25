@@ -9,13 +9,9 @@ public class Test {
         new ArrayList<>();
         List<Integer> cal = new CustomArrayList<>();
         assertion(cal.isEmpty());
-        assertionThrow(IndexOutOfBoundsException.class, cal::removeFirst);
-        assertionThrow(IndexOutOfBoundsException.class, cal::removeLast);
-        assertionThrow(IndexOutOfBoundsException.class, cal::getLast);
-        assertionThrow(IndexOutOfBoundsException.class, cal::getFirst);
+        cal.add(3);
         cal.add(7);
-        cal.addFirst(3);
-        cal.addLast(1);
+        cal.add(1);
         assertion(cal.size() == 3);
         assertion(cal.get(1) == 7);
         assertion(cal.contains(7));
@@ -23,14 +19,14 @@ public class Test {
         assertion(cal.size() == 2);
         assertion(cal.get(1) == 1);
         assertion(!cal.remove((Object)1123));
-        assertion(cal.removeFirst() == 3);
-        assertion(cal.getFirst() == 1);
+        assertion(cal.remove(0) == 3);
+        assertion(cal.get(0) == 1);
         assertionThrow(IndexOutOfBoundsException.class, () -> cal.get(10));
         assertionThrow(IndexOutOfBoundsException.class, () -> cal.remove(-1));
         assertion(cal.addAll(List.of(5,4,3,2,1)));
         // Элементы на данный момент: 1,5,4,3,2,1
         assertion(cal.size() == 6);
-        assertion(cal.get(1) == 5 && cal.getLast() == 1);
+        assertion(cal.get(1) == 5 && cal.get(cal.size()-1) == 1);
         assertion(cal.indexOf(3) == 3);
         assertion(cal.set(4, 10) == 2);
         assertion(cal.addAll(1,List.of(6,6,6)));
@@ -52,8 +48,6 @@ public class Test {
         cal.addAll(cal);
         assertion(cal.size() == 36);
         cal.add(null);
-        System.out.println(cal.size());
-        System.out.println(cal);
         cal.clear();
         assertion(cal.isEmpty());
     }
