@@ -48,6 +48,12 @@ public class Test {
         assertion(Arrays.equals(collect, new Object[]{1, 6, 5, 4, 3, 10}));
         cal.sort(Comparator.comparingInt(Integer::intValue));
         assertion(Arrays.equals(cal.toArray(), new Integer[]{1, 1, 3, 4, 5, 6, 6, 6, 10}));
+        cal.addAll(cal);
+        cal.addAll(cal);
+        assertion(cal.size() == 36);
+        cal.add(null);
+        System.out.println(cal.size());
+        System.out.println(cal);
         cal.clear();
         assertion(cal.isEmpty());
     }

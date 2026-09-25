@@ -16,7 +16,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     public CustomArrayList(Collection<? extends E> c) {
         Object[] a = c.toArray();
         if ((size = a.length) != 0) {
-            if (c.getClass() == ArrayList.class) {
+            if (c.getClass() == CustomArrayList.class) {
                 array = a;
             } else {
                 array = Arrays.copyOf(a, size, Object[].class);
@@ -57,12 +57,6 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     @Override
     public boolean contains(Object o) {
         return indexOf(o) >= 0;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Iterator<E> iterator() {
-        return (Iterator<E>) Arrays.stream(array, 0, size).iterator();
     }
 
     @Override
