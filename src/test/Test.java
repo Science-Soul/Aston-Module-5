@@ -5,6 +5,7 @@ import util.CustomArrayList;
 import java.util.*;
 
 public class Test {
+    @SuppressWarnings({"CollectionAddedToSelf", "ResultOfMethodCallIgnored"})
     public static void testCustomArrayList(){
         new ArrayList<>();
         List<Integer> cal = new CustomArrayList<>();
@@ -21,8 +22,9 @@ public class Test {
         assertion(!cal.remove((Object)1123));
         assertion(cal.remove(0) == 3);
         assertion(cal.get(0) == 1);
-        assertionThrow(IndexOutOfBoundsException.class, () -> cal.get(10));
-        assertionThrow(IndexOutOfBoundsException.class, () -> cal.remove(-1));
+        List<Integer> finalCal = cal;
+        assertionThrow(IndexOutOfBoundsException.class, () -> finalCal.get(10));
+        assertionThrow(IndexOutOfBoundsException.class, () -> finalCal.remove(10));
         assertion(cal.addAll(List.of(5,4,3,2,1)));
         // Элементы на данный момент: 1,5,4,3,2,1
         assertion(cal.size() == 6);
@@ -40,16 +42,19 @@ public class Test {
         assertion(Arrays.equals(
                 cal.toArray(new Integer[11]),
                 new Integer[]{1, 6, 6, 6, 5, 4, 3, 10, 1, null, null}));
-        Object[] collect = cal.stream().distinct().toArray();
-        assertion(Arrays.equals(collect, new Object[]{1, 6, 5, 4, 3, 10}));
+        Integer[] collect = cal.stream().distinct().toArray(Integer[]::new);
+        assertion(Arrays.equals(collect, new Integer[]{1, 6, 5, 4, 3, 10}));
         cal.sort(Comparator.comparingInt(Integer::intValue));
         assertion(Arrays.equals(cal.toArray(), new Integer[]{1, 1, 3, 4, 5, 6, 6, 6, 10}));
         cal.addAll(cal);
         cal.addAll(cal);
         assertion(cal.size() == 36);
         cal.add(null);
+        assertion(cal.get(cal.size()-1) == null);
         cal.clear();
         assertion(cal.isEmpty());
+        cal = new CustomArrayList<>(Arrays.stream(collect).toList());
+        assertion(Arrays.equals(cal.toArray(), collect));
     }
 
     public static void assertion(boolean statement){
