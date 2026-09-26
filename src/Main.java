@@ -1,4 +1,5 @@
 import car.Car;
+import test.Test;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,5 +18,7 @@ public class Main {
                 .build();
 
         System.out.println(renault);
+
+        Test.testCustomArrayList();
     }
 }
