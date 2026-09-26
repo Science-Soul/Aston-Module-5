@@ -29,7 +29,8 @@ public class File extends java.io.File {
      * @return true, если все объекты записаны, а иначе false
      */
     public static boolean write(String fileName, Object[] obj) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));){
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)){
             for (Object o : obj) {
                 try {
                     oos.writeObject(o);
@@ -79,28 +80,35 @@ public class File extends java.io.File {
     @SuppressWarnings("unchecked")
     private static <T> List<T> read(Class<T> type, String fileName, boolean multiple){
         List<T> result = new CustomArrayList<>();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))){
+        try (FileInputStream fis = new FileInputStream(fileName);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
             Object obj;
-            while (true) {
+            boolean stop = false;
+            while (!stop) {
                 try {
                     obj = ois.readObject();
-                    var f = obj.getClass();
-                    var d = obj.getClass().getClasses();
                     if (obj.getClass() == type) {
                         result.add((T) obj);
                         if (!multiple)
                             return result;
                     }
                 } catch (InvalidClassException e) {
+                    stop = true;
                     System.out.printf("Что-то пошло не так с указанным классом %s при десериализации из файла '%s': %s\n",
                             type, fileName, e.getLocalizedMessage());
                 } catch (ClassNotFoundException e) {
+                    stop = true;
                     System.out.printf("Класс сериализованного объекта из файла '%s' не найден: %s\n",
                             fileName, e.getLocalizedMessage());
                 } catch (OptionalDataException e) {
+                    stop = true;
                     System.out.printf("Был найден примитивный тип вместо объекта в файле '%s'\n", fileName);
-                } catch (IOException e) {
-                    break;
+                } catch (StreamCorruptedException e) {
+                    stop = true;
+                    System.out.printf("Данные объектов файл '%s' повреждены: %s\n",
+                            fileName, e.getLocalizedMessage());
+                } catch (IOException ignored) {
+                    stop = true;
                 }
             }
         } catch (FileNotFoundException e) {
@@ -108,7 +116,8 @@ public class File extends java.io.File {
         } catch (SecurityException e) {
             System.out.printf("Доступ на открытие файла '%s' отклонён системой\n", fileName);
         } catch (StreamCorruptedException e) {
-            System.out.printf("Информация в потоке файла '%s' противоречива: %s\n", fileName, e.getLocalizedMessage());
+            System.out.printf("Файл '%s' не может быть считан, т.к. не имеет заголовка: %s\n",
+                    fileName, e.getLocalizedMessage());
         } catch (IOException e) {
             System.out.printf("Что-то пошло не так при считывании файла '%s', проверьте, пожалуйста, файл\n",
                     fileName);

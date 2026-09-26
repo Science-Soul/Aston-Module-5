@@ -4,6 +4,8 @@ import car.Car;
 import io.File;
 import util.CustomArrayList;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
@@ -61,11 +63,11 @@ public class Test {
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public static void testFile(){
+    public static void testFile() {
         final String FILE_NAME = "test.txt";
         deleteFile(FILE_NAME);
-        System.out.print("Этот вывод часть теста, всё ок -> ");
-        assertion(File.read(Car.class, FILE_NAME).equals(Optional.empty()));
+        System.out.println("\nВсе выводы это часть теста, всё ок: ");
+        assertion(File.read(Car.class, FILE_NAME).isEmpty());
 
         Car renault = Car.builder()
                 .brand("Renault").model("Logan").year(2024).build();
@@ -88,7 +90,20 @@ public class Test {
         assertion(File.readAll(Car.class, FILE_NAME).equals(cars));
 
         assertion(File.write(FILE_NAME, cars));
-        assertion(File.read(CustomArrayList.class, FILE_NAME).get().equals(cars));
+        try (FileWriter fw = new FileWriter(FILE_NAME,true)) {
+            fw.write(Arrays.toString(cars.toArray()));
+        } catch (IOException ignored){
+        }
+        var list = File.readAll(CustomArrayList.class, FILE_NAME);
+        assertion(list.size() == 1 && list.get(0).equals(cars));
+        assertion(File.read(Car[].class, FILE_NAME).isEmpty());
+
+        try (FileWriter fw = new FileWriter(FILE_NAME)) {
+            fw.write(Arrays.toString(cars.toArray()));
+        } catch (IOException ignored) {
+        }
+        assertion(File.read(Car[].class, FILE_NAME).isEmpty());
+
         deleteFile(FILE_NAME);
     }
 
