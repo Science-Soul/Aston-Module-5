@@ -104,6 +104,7 @@ public class Test {
         }
         assertion(File.read(Car[].class, FILE_NAME).isEmpty());
 
+        System.out.println();
         deleteFile(FILE_NAME);
     }
 
