@@ -1,6 +1,13 @@
 package car;
 
-public class Car {
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Car implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private final String brand;
     private final String model;
     private final int year;
@@ -21,6 +28,21 @@ public class Car {
 
     public int getYear() {
         return year;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return year == car.year &&
+                Objects.equals(brand, car.brand) &&
+                Objects.equals(model, car.model);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(brand, model, year);
     }
 
     @Override
