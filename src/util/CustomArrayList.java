@@ -1,5 +1,9 @@
 package util;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -188,6 +192,26 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     @Override
     public int indexOf(Object o) {
         return indexOfRange(o, 0, size);
+    }
+
+    @Serial
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        s.writeInt(size);
+        for (int i = 0; i < size; i++) {
+            s.writeObject(array[i]);
+        }
+    }
+
+    @Serial
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        int n = s.readInt();
+        this.size = n;
+        this.array = new Object[Math.max(DEFAULT_CAPACITY, n)];
+        for (int i = 0; i < n; i++) {
+            array[i] = s.readObject();
+        }
     }
 
     private Object[] grow(int minCapacity) {
