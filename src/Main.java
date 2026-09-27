@@ -20,5 +20,6 @@ public class Main {
         System.out.println(renault);
 
         Test.testCustomArrayList();
+        Test.testFile();
     }
 }

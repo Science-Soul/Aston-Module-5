@@ -1,7 +1,12 @@
 package test;
 
+import car.Car;
+import io.File;
 import util.CustomArrayList;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
 public class Test {
@@ -55,6 +60,57 @@ public class Test {
         assertion(cal.isEmpty());
         cal = new CustomArrayList<>(Arrays.stream(collect).toList());
         assertion(Arrays.equals(cal.toArray(), collect));
+    }
+
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    public static void testFile() {
+        final String FILE_NAME = "test.txt";
+        deleteFile(FILE_NAME);
+        System.out.println("\nВсе выводы это часть теста, всё ок: ");
+        assertion(File.read(Car.class, FILE_NAME).isEmpty());
+
+        Car renault = Car.builder()
+                .brand("Renault").model("Logan").year(2024).build();
+        Car toyota = Car.builder()
+                .brand("Toyota").model("Corolla").year(2023).build();
+        Instant inst = Instant.now();
+        CustomArrayList<Car> cars = new CustomArrayList<>();
+        cars.add(renault);
+        cars.add(toyota);
+
+        assertion(File.write(FILE_NAME, renault));
+        assertionThrow(NoSuchElementException.class,() -> File.read(Instant.class, FILE_NAME).get());
+        assertion(File.read(Car.class, FILE_NAME).get().equals(cars.get(0)));
+
+        assertion(File.write(FILE_NAME, new Object[]{inst, toyota}));
+        assertion(File.read(Car.class, FILE_NAME).get().equals(cars.get(1)));
+        assertion(File.read(Instant.class, FILE_NAME).equals(Optional.of(inst)));
+
+        assertion(File.write(FILE_NAME, new Object[]{renault, Instant.now(), toyota}));
+        assertion(File.readAll(Car.class, FILE_NAME).equals(cars));
+
+        assertion(File.write(FILE_NAME, cars));
+        try (FileWriter fw = new FileWriter(FILE_NAME,true)) {
+            fw.write(Arrays.toString(cars.toArray()));
+        } catch (IOException ignored){
+        }
+        var list = File.readAll(CustomArrayList.class, FILE_NAME);
+        assertion(list.size() == 1 && list.get(0).equals(cars));
+        assertion(File.read(Car[].class, FILE_NAME).isEmpty());
+
+        try (FileWriter fw = new FileWriter(FILE_NAME)) {
+            fw.write(Arrays.toString(cars.toArray()));
+        } catch (IOException ignored) {
+        }
+        assertion(File.read(Car[].class, FILE_NAME).isEmpty());
+
+        System.out.println();
+        deleteFile(FILE_NAME);
+    }
+
+    private static void deleteFile(String fileName){
+        File file = new File(fileName);
+        file.delete();
     }
 
     public static void assertion(boolean statement){
