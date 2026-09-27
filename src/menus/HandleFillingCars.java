@@ -2,10 +2,8 @@ package menus;
 
 import car.Car;
 
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 public class HandleFillingCars extends Menu {
     private static final int NEED_VALUES = 3;
@@ -39,15 +37,10 @@ public class HandleFillingCars extends Menu {
 
     private void startReadCars(Scanner sc, int length){
         cars.clear();
-        String[] answer;
-        AtomicBoolean isOk = new AtomicBoolean();
-        AtomicInteger order = new AtomicInteger(1);
         for (int i = 0; i < length; i++) {
             Car.Builder builder = Car.builder();
-            isOk.set(true);
-            order.set(1);
             System.out.printf("%s. ", i+1);
-            answer = getStringAnswer(sc).split(",");
+            String[] answer = getStringAnswer(sc).split(",");
             if (answer[0].equals(String.valueOf(CODE_EXIT)))
                 break;
             if (answer.length < NEED_VALUES)  {
@@ -56,12 +49,9 @@ public class HandleFillingCars extends Menu {
                 continue;
             }
 
-            Arrays.stream(answer).map(String::strip)
-                    .forEach(str -> {
-                        if (!isOk.get()) return;
-                        isOk.set(buildCar(builder, str, order.getAndIncrement()));
-                    });
-            if (!isOk.get()) {
+            boolean isOk = IntStream.range(0, NEED_VALUES)
+                    .allMatch(k -> buildCar(builder, answer[k].strip(), k + 1));
+            if (!isOk) {
                 i--;
                 continue;
             }
@@ -70,7 +60,6 @@ public class HandleFillingCars extends Menu {
     }
 
     boolean buildCar(Car.Builder builder, String value, int order){
-        if (order > NEED_VALUES) return true;
         if (value.isBlank()) {
             printWarn("Вы ввели пустое значение!");
             return false;
