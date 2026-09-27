@@ -5,6 +5,7 @@ import util.CustomArrayList;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class CarsGenerator implements ObjectsGenerator<Car> {
     private List<String> brands;
@@ -27,20 +28,20 @@ public class CarsGenerator implements ObjectsGenerator<Car> {
 
     @Override
     public List<Car> generate(int length) {
-        List<Car> res = new CustomArrayList<>();
-        Car car;
-        for (int i = 0; i < length; i++) {
-            int rangeDate = random.nextInt(-11, 27);
-            int year = 2000 + rangeDate;
-            car = Car.builder()
-                    .brand(pick(brands)).model(pick(models))
-                    .year(year).build();
-            res.add(car);
-        }
-        return res;
+        return new CustomArrayList<>(
+                Stream.generate(() -> Car.builder()
+                        .brand(pick(brands)).model(pick(models))
+                        .year(pickYear(1980, 2026))
+                        .build())
+                .limit(length)
+                .toList());
     }
 
     private String pick(List<String> values){
         return values.get(random.nextInt(values.size()));
+    }
+
+    private int pickYear(int minYear, int maxYear){
+        return random.nextInt(minYear, maxYear+1);
     }
 }
