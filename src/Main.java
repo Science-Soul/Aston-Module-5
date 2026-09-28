@@ -21,5 +21,7 @@ public class Main {
 
         Test.testCustomArrayList();
         Test.testFile();
+        System.out.println(Test.testCarsGenerator());
+        Test.tesHandleFillingCars();
     }
 }

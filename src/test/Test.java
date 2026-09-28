@@ -1,7 +1,10 @@
 package test;
 
 import car.Car;
+import generators.CarsGenerator;
+import generators.ObjectsGenerator;
 import io.File;
+import menus.HandleFillingCars;
 import util.CustomArrayList;
 
 import java.io.FileWriter;
@@ -106,6 +109,19 @@ public class Test {
 
         System.out.println();
         deleteFile(FILE_NAME);
+    }
+
+    public static List<Car> testCarsGenerator(){
+        ObjectsGenerator<Car> og = new CarsGenerator();
+        List<Car> generate = og.generate(10);
+        assertion(generate.size() == 10);
+        return generate;
+    }
+
+    public static void tesHandleFillingCars(){
+        HandleFillingCars hfc = new HandleFillingCars();
+        Scanner sc = new Scanner(System.in);
+        hfc.start(sc, "3");
     }
 
     private static void deleteFile(String fileName){
