@@ -149,30 +149,68 @@ public final class JsonFileLogger {
      * рекурсивно тем же образом.
      */
     private static String prettyPrintObject(String compactValue, int indentLevel) {
-        if (!compactValue.startsWith("{")) {
-            // Массивы, строки, числа, null, boolean — оставляем как есть, в одну строку
-            return compactValue;
-        }
-        String inner = compactValue.substring(1, compactValue.length() - 1);
-        if (inner.isEmpty()) {
-            return "{}";
+        if (compactValue.startsWith("{")) {
+            String inner = compactValue.substring(1, compactValue.length() - 1);
+            if (inner.isEmpty()) {
+                return "{}";
+            }
+
+            List<String> fields = splitTopLevelByComma(inner);
+            String fieldIndent = "  ".repeat(indentLevel);
+            String closingIndent = "  ".repeat(indentLevel - 1);
+
+            StringBuilder sb = new StringBuilder("{\n");
+            for (int i = 0; i < fields.size(); i++) {
+                String[] keyValue = splitKeyValue(fields.get(i));
+                sb.append(fieldIndent)
+                        .append(keyValue[0])
+                        .append(": ")
+                        .append(prettyPrintObject(keyValue[1], indentLevel + 1));
+                if (i < fields.size() - 1) sb.append(",");
+                sb.append("\n");
+            }
+            sb.append(closingIndent).append("}");
+            return sb.toString();
         }
 
-        List<String> fields = splitTopLevelByComma(inner);
-        String fieldIndent = "  ".repeat(indentLevel);
+        if (compactValue.startsWith("[")) {
+            return prettyPrintArray(compactValue, indentLevel);
+        }
+
+        return compactValue;
+    }
+
+    /**
+     * Форматирует JSON-массив. Если в массиве есть объекты (например, машины),
+     * каждый элемент печатается с новой строки. Если массив состоит только из
+     * примитивов/строк, он остаётся компактным.
+     */
+    private static String prettyPrintArray(String compactArray, int indentLevel) {
+        String inner = compactArray.substring(1, compactArray.length() - 1);
+        if (inner.isEmpty()) {
+            return "[]";
+        }
+
+        List<String> elements = splitTopLevelByComma(inner);
+
+        boolean hasStructuredElement = elements.stream()
+                .anyMatch(e -> e.startsWith("{") || e.startsWith("["));
+
+        if (!hasStructuredElement) {
+            return compactArray;
+        }
+
+        String elementIndent = "  ".repeat(indentLevel);
         String closingIndent = "  ".repeat(indentLevel - 1);
 
-        StringBuilder sb = new StringBuilder("{\n");
-        for (int i = 0; i < fields.size(); i++) {
-            String[] keyValue = splitKeyValue(fields.get(i));
-            sb.append(fieldIndent)
-                    .append(keyValue[0])
-                    .append(": ")
-                    .append(prettyPrintObject(keyValue[1], indentLevel + 1));
-            if (i < fields.size() - 1) sb.append(",");
+        StringBuilder sb = new StringBuilder("[\n");
+        for (int i = 0; i < elements.size(); i++) {
+            sb.append(elementIndent)
+                    .append(prettyPrintObject(elements.get(i), indentLevel + 1));
+            if (i < elements.size() - 1) sb.append(",");
             sb.append("\n");
         }
-        sb.append(closingIndent).append("}");
+        sb.append(closingIndent).append("]");
         return sb.toString();
     }
 
