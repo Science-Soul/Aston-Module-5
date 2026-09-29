@@ -1,10 +1,13 @@
 package car;
 
+
+import util.JsonSerializable;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Car implements Serializable {
+public class Car implements Serializable, JsonSerializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -52,6 +55,21 @@ public class Car implements Serializable {
                 ", Модель: " + model +
                 ", Год: " + year +
                 '}';
+    }
+
+    /**
+     * Представление машины в виде JSON-объекта: {"brand":"...","model":"...","year":...}.
+     * Используется, например, {@link util.JsonFileLogger} при записи коллекций машин в файл.
+     */
+    @Override
+    public String toJson() {
+        return "{\"brand\":\"" + escape(brand) + "\","
+                + "\"model\":\"" + escape(model) + "\","
+                + "\"year\":" + year + "}";
+    }
+
+    private static String escape(String s) {
+        return s == null ? "" : s.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 
     public static Builder builder() {

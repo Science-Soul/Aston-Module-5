@@ -6,6 +6,7 @@ import generators.ObjectsGenerator;
 import io.File;
 import menus.HandleFillingCars;
 import util.CustomArrayList;
+import util.JsonFileLogger;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class Test {
         assertion(cal.size() == 3);
         assertion(cal.get(1) == 7);
         assertion(cal.contains(7));
+        JsonFileLogger.logFoundValue(7, true, "found_values.json");
         assertion(cal.remove((Object)7));
         assertion(cal.size() == 2);
         assertion(cal.get(1) == 1);
@@ -38,6 +40,7 @@ public class Test {
         assertion(cal.size() == 6);
         assertion(cal.get(1) == 5 && cal.get(cal.size()-1) == 1);
         assertion(cal.indexOf(3) == 3);
+        JsonFileLogger.logFoundValue(3, cal.indexOf(3), "found_values.json");
         assertion(cal.set(4, 10) == 2);
         assertion(cal.addAll(1,List.of(6,6,6)));
         assertion(Arrays.equals(cal.toArray(), new Object[]{1, 6, 6, 6, 5, 4, 3, 10, 1}));
@@ -54,6 +57,7 @@ public class Test {
         assertion(Arrays.equals(collect, new Integer[]{1, 6, 5, 4, 3, 10}));
         cal.sort(Comparator.comparingInt(Integer::intValue));
         assertion(Arrays.equals(cal.toArray(), new Integer[]{1, 1, 3, 4, 5, 6, 6, 6, 10}));
+        JsonFileLogger.logSortedCollection(cal, "sorted_lists.json");
         cal.addAll(cal);
         cal.addAll(cal);
         assertion(cal.size() == 36);
@@ -63,6 +67,7 @@ public class Test {
         assertion(cal.isEmpty());
         cal = new CustomArrayList<>(Arrays.stream(collect).toList());
         assertion(Arrays.equals(cal.toArray(), collect));
+        JsonFileLogger.logSortedCollection(cal, "sorted_lists.json");
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
