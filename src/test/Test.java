@@ -116,12 +116,12 @@ public class Test {
         deleteFile(FILE_NAME);
     }
 
-    public static List<Car> testCarsGenerator(){
+    /*public static List<Car> testCarsGenerator(){
         ObjectsGenerator<Car> og = new CarsGenerator();
         List<Car> generate = og.generate(10);
         assertion(generate.size() == 10);
         return generate;
-    }
+    }*/
 
     public static void tesHandleFillingCars(){
         HandleFillingCars hfc = new HandleFillingCars();

@@ -1,0 +1,37 @@
+package menus.main;
+
+import menus.Menu;
+import java.util.Scanner;
+
+public class MainMenu extends Menu {
+    private final Scanner scanner = new Scanner(System.in);
+    private boolean isRunning = true;
+
+    MenuCommand[] commands = new MenuCommand[]{
+        new FillRandomCommand(scanner, this),
+        new FillManuallyCommand(scanner, this),
+        new CountCommand(scanner, this),
+    };
+
+    @Override
+    public void start(Scanner sc, String... args) {
+        while (isRunning) {
+            printMenu();
+            int choice = getIntAnswer(this.scanner, 1, commands.length, 0);
+            if (choice == 0) return;
+            commands[choice - 1].execute();
+        }
+    }
+
+    public void printMenu() {
+        System.out.println("\n==== ГЛАВНОЕ МЕНЮ ====");
+
+        for (int i = 0; i < commands.length; i++) {
+            System.out.printf("%d. %s\n", i + 1, commands[i].getDescription());
+        }
+
+
+        System.out.println("\n0. Выход");
+        System.out.println("\nВыберите пункт меню: ");
+    }
+}

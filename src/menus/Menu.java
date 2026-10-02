@@ -9,30 +9,32 @@ import java.util.Scanner;
 public abstract class Menu {
 
     final int CODE_EXIT = 0;
-    static List<Car> cars = new CustomArrayList<>();
+    public static List<Car> cars = new CustomArrayList<>();
 
-    abstract void start(Scanner sc, String ... args);
+    abstract public void start(Scanner sc, String ... args);
 
 
-    void printWarn(String msg) {
+    public void printWarn(String msg) {
         System.out.println(msg);
     }
 
-    void printEnter(){
+    public void printEnter(){
         System.out.println("Ввод: ");
     }
 
-    String getStringAnswer(Scanner sc) {
+    public String getStringAnswer(Scanner sc) {
         return sc.nextLine();
     }
 
-    int getIntAnswer(Scanner sc) {
+    public int getIntAnswer(Scanner sc) {
         boolean error;
         int result = 0;
         do {
             try {
                 error = false;
-                result = sc.nextInt();
+                String input = sc.nextLine().trim(); // если делать result = sc.nextInt(), то при использовании
+                // в команде возникает баг - непреднамеренный ввод пустой строки
+                result = Integer.parseInt(input);
             } catch (Exception ignored) {
                 error = true;
                 printWarn("Это не число!");
@@ -43,12 +45,12 @@ public abstract class Menu {
         return result;
     }
 
-    int getIntAnswer(Scanner sc, int leftBorder, int rightBorder, int exit) {
+    public int getIntAnswer(Scanner sc, int leftBorder, int rightBorder, int exit) {
         boolean inBorders;
         int result;
         do {
             result = getIntAnswer(sc);
-            inBorders = result > leftBorder && result < rightBorder;
+            inBorders = result >= leftBorder && result <= rightBorder;
             if (result == exit) break;
             if (!inBorders) {
                 printWarn("Необходимо число от %s до %s!".formatted(leftBorder, rightBorder));

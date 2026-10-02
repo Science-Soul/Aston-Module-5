@@ -26,7 +26,7 @@ public class CarsGenerator implements ObjectsGenerator<Car> {
         random = new Random();
     }
 
-    @Override
+    /*@Override
     public List<Car> generate(int length) {
         return new CustomArrayList<>(
                 Stream.generate(() -> Car.builder()
@@ -35,7 +35,20 @@ public class CarsGenerator implements ObjectsGenerator<Car> {
                         .build())
                 .limit(length)
                 .toList());
+    }*/
+
+    @Override
+    public void generate(List<Car> targetList, int length) {
+        // Генерируем объекты напрямую в предоставленный список
+        Stream.generate(() -> Car.builder()
+                .brand(pick(brands))
+                .model(pick(models))
+                .year(pickYear(1980, 2026))
+                .build())
+            .limit(length)
+            .forEach(targetList::add); // Просто добавляем элементы в наш список
     }
+
 
     private String pick(List<String> values){
         return values.get(random.nextInt(values.size()));

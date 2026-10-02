@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class CustomArrayList<E> extends AbstractList<E> implements
@@ -12,6 +13,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     transient Object[] array;
     private final static int DEFAULT_CAPACITY = 10;
     private int size;
+    private int modCount = 0;
 
     public CustomArrayList() {
         array = new Object[DEFAULT_CAPACITY];
@@ -93,12 +95,14 @@ public class CustomArrayList<E> extends AbstractList<E> implements
 
     @Override
     public boolean add(E e) {
+        modCount++;
         add(e, array, size);
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
+        modCount++;
         int index = indexOf(o);
         if (index == -1) return false;
         fastRemove(array, index);
@@ -110,6 +114,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
      * и не возвращает значения.
      */
     private void fastRemove(Object[] array, int i) {
+        modCount++;
         final int newSize;
         if ((newSize = size - 1) > i)
             System.arraycopy(array, i + 1, array, i, newSize - i);
@@ -125,6 +130,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     public boolean addAll(int index, Collection<? extends E> c) {
         Objects.checkIndex(index, size+1);
         Object[] newArray = c.toArray();
+        modCount++;
         int addedCount = newArray.length;
         if (addedCount == 0)
             return false;
@@ -144,6 +150,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
 
     @Override
     public void clear() {
+        modCount++;
         for (int to = size, i = size = 0; i < to; i++)
             array[i] = null;
     }
@@ -172,6 +179,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
         if (size == array.length)
             grow();
         System.arraycopy(array, index, array, index + 1, size - index);
+        modCount++;
         array[index] = element;
         size++;
     }
@@ -196,10 +204,15 @@ public class CustomArrayList<E> extends AbstractList<E> implements
 
     @Serial
     private void writeObject(ObjectOutputStream s) throws IOException {
+        int expectedModCount = modCount;
         s.defaultWriteObject();
         s.writeInt(size);
         for (int i = 0; i < size; i++) {
             s.writeObject(array[i]);
+        }
+
+        if (expectedModCount != modCount) {
+            throw new ConcurrentModificationException();
         }
     }
 
@@ -228,5 +241,56 @@ public class CustomArrayList<E> extends AbstractList<E> implements
 
     private Object[] grow() {
         return grow(size + 1);
+    }
+
+
+    // Для многопоточного метода
+    @Override
+    public Spliterator<E> spliterator() {
+        return new SafeSpliterator(0, size, modCount);
+    }
+
+    private class SafeSpliterator implements Spliterator<E> {
+        private int index;
+        private final int fence;
+        private final int expectedModCount;
+
+        SafeSpliterator(int origin, int fence, int expectedModCount) {
+            this.index = origin;
+            this.fence = fence;
+            this.expectedModCount = expectedModCount;
+        }
+
+        @Override
+        public boolean tryAdvance(Consumer<? super E> action) {
+            if (modCount != expectedModCount) {
+                throw new ConcurrentModificationException();
+            }
+            if (index < fence) {
+                action.accept((E) array[index++]);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Spliterator<E> trySplit() {
+            int hi = fence;
+            int lo = index;
+            int mid = (lo + hi) >>> 1; // для поиска середины вместо
+            // деления на 2 во избежание ошибки (если lo + hi > int.Max);
+            if (lo >= mid) return null;
+            return new SafeSpliterator(lo, index = mid, expectedModCount);
+        }
+
+        @Override
+        public long estimateSize() {
+            return fence - index;
+        }
+
+        @Override
+        public int characteristics() {
+            return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
+        }
     }
 }

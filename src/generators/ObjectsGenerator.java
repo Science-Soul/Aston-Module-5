@@ -7,5 +7,7 @@ import java.util.List;
  * @param <T>
  */
 public interface ObjectsGenerator<T> {
-    List<T> generate(int length);
+    //List<T> generate(int length);
+    void generate(List<T> targetList, int length);
+
 }

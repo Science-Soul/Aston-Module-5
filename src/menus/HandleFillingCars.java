@@ -27,7 +27,9 @@ public class HandleFillingCars extends Menu {
     }
 
     int parseArgs(String[] args){
-        if (args.length < 1) throw new IllegalArgumentException("Отсутствует длина массива");
+        if (args.length < 1) {
+            throw new IllegalArgumentException("Отсутствует длина массива");
+        }
         try {
             return Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
@@ -41,13 +43,15 @@ public class HandleFillingCars extends Menu {
             Car.Builder builder = Car.builder();
             System.out.printf("%s. ", i+1);
             String[] answer = getStringAnswer(sc).split(",");
-            if (answer[0].equals(String.valueOf(CODE_EXIT)))
+
+            if (answer.length != 0 && answer[0].equals(String.valueOf(CODE_EXIT))) // добавил проверку длины, потому что при вводе ,,, кидал ошибку
                 break;
             if (answer.length < NEED_VALUES)  {
-                printWarn("Вы не написали полностью данные!");
+                printWarn("Вы ввели неполные данные!");
                 i--;
                 continue;
             }
+
 
             boolean isOk = IntStream.range(0, NEED_VALUES)
                     .allMatch(k -> buildCar(builder, answer[k].strip(), k + 1));
