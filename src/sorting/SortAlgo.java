@@ -1,15 +1,14 @@
 package sorting;
 
-import util.CustomArrayList;
-
 import java.util.Comparator;
+import java.util.List;
 
 public class SortAlgo {
 
     private SortAlgo() {}
 
-    // метод принимает любой кастомный лист (список). сортировка вставками.
-    public static <T> void insertionSort(CustomArrayList<T> list, Comparator<T> comparator) {
+    // метод принимает любой лист (список). сортировка вставками.
+    public static <T> void insertionSort(List<T> list, Comparator<T> comparator) {
         for (int i = 1; i < list.size(); i++) {
             T current = list.get(i);
             int j = i - 1;

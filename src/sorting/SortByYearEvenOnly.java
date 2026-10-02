@@ -9,18 +9,6 @@ import util.CustomArrayList;
 // складываем отсортированные чётные значения обратно на те же позиции, нечётные не трогаем.
 public class SortByYearEvenOnly implements CarSortStrategy { //
 
-    private void sortInsertion(CustomArrayList<Car> list) {
-        for (int i = 1; i < list.size(); i++) {
-            Car current = list.get(i);
-            int j = i - 1;
-            while (j >= 0 && list.get(j).getYear() > current.getYear()) {
-                list.set(j + 1, list.get(j));
-                j--;
-            }
-            list.set(j + 1, current);
-        }
-    }
-
     @Override
     public void sort(CustomArrayList<Car> cars) {
         CustomArrayList<Integer> evenPositions = new CustomArrayList<>();
@@ -34,7 +22,7 @@ public class SortByYearEvenOnly implements CarSortStrategy { //
             }
         }
 
-        sortInsertion(evenValues);
+        SortAlgo.insertionSort(evenValues, (a, b) -> Integer.compare(a.getYear(), b.getYear()));
 
         for (int i = 0; i < evenPositions.size(); i++) {
             cars.set(evenPositions.get(i), evenValues.get(i));
