@@ -1,4 +1,5 @@
 import car.Car;
+import test.SortTest;
 import test.Test;
 import util.CustomArrayList;
 import util.JsonFileLogger;
@@ -48,5 +49,13 @@ public class Main {
                 index,
                 "found_cars.json"
         );
+//        проверка сортировок
+//        SortTest.testSortByBrand();
+//        SortTest.testSortByModel();
+//        SortTest.testSortByYear();
+//        SortTest.testSortByYearEvenOnly();
+//        SortTest.testSortTypeEnum();
+//        System.out.println("Все тесты сортировки пройдены");
+
     }
 }
