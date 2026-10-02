@@ -13,7 +13,7 @@ public class CustomArrayList<E> extends AbstractList<E> implements
     transient Object[] array;
     private final static int DEFAULT_CAPACITY = 10;
     private int size;
-    private int modCount = 0;
+    //private int modCount = 0;
 
     public CustomArrayList() {
         array = new Object[DEFAULT_CAPACITY];
