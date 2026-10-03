@@ -44,7 +44,8 @@ public class HandleFillingCars extends Menu {
             System.out.printf("%s. ", i+1);
             String[] answer = getStringAnswer(sc).split(",");
 
-            if (answer.length != 0 && answer[0].equals(String.valueOf(CODE_EXIT))) // добавил проверку длины, потому что при вводе ,,, кидал ошибку
+            if (answer.length != 0 && answer[0].equals(String.valueOf(CODE_EXIT))) // добавил проверку
+                // длины, потому что при вводе ,,, кидал ошибку
                 break;
             if (answer.length < NEED_VALUES)  {
                 printWarn("Вы ввели неполные данные!");

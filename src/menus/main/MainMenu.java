@@ -10,6 +10,7 @@ public class MainMenu extends Menu {
     MenuCommand[] commands = new MenuCommand[]{
         new FillRandomCommand(scanner, this),
         new FillManuallyCommand(scanner, this),
+        new FillFromFileCommand(scanner, this),
         new CountCommand(scanner, this),
     };
 

@@ -90,7 +90,8 @@ public class File extends java.io.File {
                     if (obj.getClass() == type) {
                         result.add((T) obj);
                         if (!multiple)
-                            return result;
+                            //return result;
+                            stop = true;
                     }
                 } catch (InvalidClassException e) {
                     stop = true;
