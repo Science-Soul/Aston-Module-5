@@ -9,7 +9,7 @@ import java.util.Scanner;
 public abstract class Menu {
 
     final int CODE_EXIT = 0;
-    public static List<Car> cars = new CustomArrayList<>();
+    public static CustomArrayList<Car> cars = new CustomArrayList<>();
 
     abstract public void start(Scanner sc, String ... args);
 

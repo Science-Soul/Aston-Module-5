@@ -17,7 +17,7 @@ public class CountCommand implements MenuCommand {
     public void execute() {
         var list = Menu.cars;
         System.out.println("Размер массива = " + list.size());
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             System.out.println("Массив пуст! Сначала заполните массив.");
         } else {
             System.out.println("Введите индекс элемента, копии которого хотите сосчитать: ");

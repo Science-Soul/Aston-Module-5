@@ -11,6 +11,12 @@ public class MainMenu extends Menu {
         new FillRandomCommand(scanner, this),
         new FillManuallyCommand(scanner, this),
         new FillFromFileCommand(scanner, this),
+        new SortByBrandCommand(),
+        new SortByModelCommand(),
+        new SortByYearCommand(),
+        new SortByEvenYearCommand(),
+        new WriteToJSONCommand(scanner, this),
+        new WriteToBinaryFileCommand(scanner, this),
         new CountCommand(scanner, this),
     };
 
