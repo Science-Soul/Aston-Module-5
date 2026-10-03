@@ -19,7 +19,7 @@ public abstract class Menu {
     }
 
     public void printEnter(){
-        System.out.println("Ввод: ");
+        System.out.print("Ввод: ");
     }
 
     public String getStringAnswer(Scanner sc) {
