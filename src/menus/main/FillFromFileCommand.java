@@ -19,9 +19,9 @@ public class FillFromFileCommand implements MenuCommand {
 
     @Override
     public void execute() {
-        System.out.println("Введите путь к файлу: (0 - отмена)");
+        System.out.printf("Введите путь к файлу (%d - отмена): ", menu.CODE_EXIT);
         String path = menu.getStringAnswer(scanner);
-        if (path.equals("0")) return;
+        if (path.equals(String.valueOf(menu.CODE_EXIT))) return;
         CustomArrayList<Car> list = File.read(CustomArrayList.class, path).orElse(null);
         if (list != null) {
             System.out.println(list);

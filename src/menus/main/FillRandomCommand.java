@@ -20,8 +20,9 @@ public class FillRandomCommand implements MenuCommand {
 
     @Override
     public void execute() {
-        System.out.print("Введите количество машин: ");
-        int length = menu.getIntAnswer(scanner, 1, 2000000, 0);
+        System.out.printf("Введите количество машин (%d - отмена): ", menu.CODE_EXIT);
+        int length = menu.getIntAnswer(scanner, 1, 2000000, menu.CODE_EXIT);
+        if (length == menu.CODE_EXIT) return;
         Menu.cars.clear();
         generator.generate(Menu.cars, length);
         System.out.println(Menu.cars);

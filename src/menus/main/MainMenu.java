@@ -24,8 +24,9 @@ public class MainMenu extends Menu {
     public void start(Scanner sc, String... args) {
         while (isRunning) {
             printMenu();
-            int choice = getIntAnswer(this.scanner, 1, commands.length, 0);
-            if (choice == 0) return;
+            int choice = getIntAnswer(this.scanner, 1, commands.length, CODE_EXIT);
+            if (choice == CODE_EXIT) return;
+            System.out.println();
             commands[choice - 1].execute();
         }
     }
@@ -38,7 +39,7 @@ public class MainMenu extends Menu {
         }
 
 
-        System.out.println("\n0. Выход");
-        System.out.println("\nВыберите пункт меню: ");
+        System.out.printf("\n%d. Выход%n", CODE_EXIT);
+        System.out.print("\nВыберите пункт меню: ");
     }
 }

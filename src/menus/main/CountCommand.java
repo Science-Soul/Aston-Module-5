@@ -16,15 +16,16 @@ public class CountCommand implements MenuCommand {
     @Override
     public void execute() {
         var list = Menu.cars;
-        System.out.println("Размер массива = " + list.size());
         if (list.isEmpty()) {
             System.out.println("Массив пуст! Сначала заполните массив.");
-        } else {
-            System.out.println("Введите индекс элемента, копии которого хотите сосчитать: ");
-            int index = menu.getIntAnswer(scanner, 0, list.size() - 1, 0);
-            long numberOfElements = MultiThreadCounter.countN(list, index);
-            System.out.println("Число вхождений элемента " + list.get(index) + " = " + numberOfElements);
+            return;
         }
+        System.out.println("Размер массива = " + list.size());
+        System.out.printf("Введите индекс элемента, копии которого хотите сосчитать (%d - отмена): ", menu.CODE_EXIT);
+        int index = menu.getIntAnswer(scanner, 0, list.size() - 1, 0);
+        if (index == menu.CODE_EXIT) return;
+        long numberOfElements = MultiThreadCounter.countN(list, index);
+        System.out.println("Число вхождений элемента " + list.get(index) + " = " + numberOfElements);
     }
 
     @Override

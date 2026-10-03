@@ -1,7 +1,9 @@
 package menus.main;
 
+import car.Car;
 import io.File;
 import menus.Menu;
+import util.CustomArrayList;
 import util.JsonFileLogger;
 
 import java.util.Scanner;
@@ -22,10 +24,13 @@ public class WriteToBinaryFileCommand implements MenuCommand {
             return;
         }
 
-        System.out.print("Введите имя файла: ");
+        System.out.printf("Введите имя файла (%d - отмена): ", menu.CODE_EXIT);
         String fileName = menu.getStringAnswer(scanner);
+        if (fileName.equals(String.valueOf(menu.CODE_EXIT))) return;
         String path = "resources/data/" + fileName;
-        File.write(path, Menu.cars);
+        CustomArrayList<Car> list = File.read(CustomArrayList.class, path).orElse(new CustomArrayList<>());
+        list.addAll(Menu.cars);
+        File.write(path, list);
         System.out.print("Файл сохранен в папке resources/data");
     }
 

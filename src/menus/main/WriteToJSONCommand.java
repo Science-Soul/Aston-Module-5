@@ -20,8 +20,9 @@ public class WriteToJSONCommand implements MenuCommand {
             return;
         }
 
-        System.out.print("Введите имя файла: ");
+        System.out.printf("Введите имя файла (%d - отмена): ", menu.CODE_EXIT);
         String fileName = menu.getStringAnswer(scanner);
+        if (fileName.equals(String.valueOf(menu.CODE_EXIT))) return;
         JsonFileLogger.logSortedCollection(Menu.cars, fileName);
         System.out.print("Файл сохранен в папке resources/data");
     }

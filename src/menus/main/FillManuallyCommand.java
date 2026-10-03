@@ -16,8 +16,9 @@ public class FillManuallyCommand implements MenuCommand {
 
     @Override
     public void execute() {
-        System.out.print("Введите количество машин: ");
+        System.out.printf("Введите количество машин (%d - отмена): ", menu.CODE_EXIT);
         int choice = menu.getIntAnswer(scanner);
+        if (choice == menu.CODE_EXIT) return;
         String s = String.valueOf(choice);
         HandleFillingCars hfc = new HandleFillingCars();
         hfc.start(scanner, s);
