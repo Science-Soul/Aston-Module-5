@@ -1,11 +1,7 @@
 package menus.main;
 
-import menus.HandleFillingCars;
 import menus.Menu;
 import util.MultiThreadCounter;
-import util.TestMultithreds;
-
-import java.util.List;
 import java.util.Scanner;
 
 public class CountCommand implements MenuCommand {
