@@ -4,7 +4,9 @@ import util.CustomArrayList;
 
 import java.io.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class File extends java.io.File {
     public File(String pathname) {
@@ -78,40 +80,39 @@ public class File extends java.io.File {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> List<T> read(Class<T> type, String fileName, boolean multiple){
+    private static <T> List<T> read(Class<T> type, String fileName, boolean multiple) {
         List<T> result = new CustomArrayList<>();
         try (FileInputStream fis = new FileInputStream(fileName);
              ObjectInputStream ois = new ObjectInputStream(fis)) {
-            Object obj;
-            boolean stop = false;
-            while (!stop) {
-                try {
-                    obj = ois.readObject();
-                    if (obj.getClass() == type) {
-                        result.add((T) obj);
-                        if (!multiple)
-                            //return result;
-                            stop = true;
-                    }
-                } catch (InvalidClassException e) {
-                    stop = true;
-                    System.out.printf("Что-то пошло не так с указанным классом %s при десериализации из файла '%s': %s\n",
-                            type, fileName, e.getLocalizedMessage());
-                } catch (ClassNotFoundException e) {
-                    stop = true;
-                    System.out.printf("Класс сериализованного объекта из файла '%s' не найден: %s\n",
-                            fileName, e.getLocalizedMessage());
-                } catch (OptionalDataException e) {
-                    stop = true;
-                    System.out.printf("Был найден примитивный тип вместо объекта в файле '%s'\n", fileName);
-                } catch (StreamCorruptedException e) {
-                    stop = true;
-                    System.out.printf("Данные объектов файл '%s' повреждены: %s\n",
-                            fileName, e.getLocalizedMessage());
-                } catch (IOException ignored) {
-                    stop = true;
-                }
-            }
+            Stream.generate(() -> {
+                        try {
+                            return ois.readObject();
+                        } catch (InvalidClassException e) {
+                            System.out.printf("Что-то пошло не так с указанным классом %s при десериализации из файла '%s': %s\n",
+                                    type, fileName, e.getLocalizedMessage());
+                            return new Object();
+                        } catch (ClassNotFoundException e) {
+                            System.out.printf("Класс сериализованного объекта из файла '%s' не найден: %s\n",
+                                    fileName, e.getLocalizedMessage());
+                            return new Object();
+                        } catch (OptionalDataException e) {
+                            System.out.printf("Был найден примитивный тип вместо объекта в файле '%s'\n", fileName);
+                            return new Object();
+                        } catch (StreamCorruptedException e) {
+                            System.out.printf("Данные объектов файла '%s' повреждены: %s\n",
+                                    fileName, e.getLocalizedMessage());
+                            return new Object();
+                        } catch (EOFException e) {
+                            return null;
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(new IOException(e));
+                        }
+                    })
+                    .takeWhile(Objects::nonNull)
+                    .filter(obj -> obj.getClass() == type)
+                    .map(obj -> (T) obj)
+                    .limit(multiple ? Long.MAX_VALUE : 1)
+                    .forEach(result::add);
         } catch (FileNotFoundException e) {
             System.out.printf("Файл '%s' не найден или не может быть открыт\n", fileName);
         } catch (SecurityException e) {
