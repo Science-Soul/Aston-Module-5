@@ -4,8 +4,6 @@ import car.Car;
 import io.File;
 import menus.Menu;
 import util.CustomArrayList;
-
-import java.util.List;
 import java.util.Scanner;
 
 public class FillFromFileCommand implements MenuCommand {

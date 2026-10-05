@@ -8,5 +8,4 @@ public class SortByYear implements CarSortStrategy { // // класс компа
     public void sort(CustomArrayList<Car> cars) {
         SortAlgo.insertionSort(cars, (a, b) -> Integer.compare(a.getYear(), b.getYear()));
     }
-
 }

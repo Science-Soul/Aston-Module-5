@@ -19,6 +19,4 @@ public class SortAlgo {
             list.set(j + 1, current);
         }
     }
-
 }
-

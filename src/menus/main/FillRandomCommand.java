@@ -4,8 +4,6 @@ import car.Car;
 import generators.CarsGenerator;
 import generators.ObjectsGenerator;
 import menus.Menu;
-
-import java.util.List;
 import java.util.Scanner;
 
 public class FillRandomCommand implements MenuCommand {

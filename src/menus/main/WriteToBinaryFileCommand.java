@@ -4,7 +4,6 @@ import car.Car;
 import io.File;
 import menus.Menu;
 import util.CustomArrayList;
-import util.JsonFileLogger;
 
 import java.util.Scanner;
 

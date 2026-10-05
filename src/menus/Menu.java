@@ -2,8 +2,6 @@ package menus;
 
 import car.Car;
 import util.CustomArrayList;
-
-import java.util.List;
 import java.util.Scanner;
 
 public abstract class Menu {

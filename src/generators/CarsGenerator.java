@@ -2,7 +2,6 @@ package generators;
 
 import car.Car;
 import util.CustomArrayList;
-
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -26,17 +25,6 @@ public class CarsGenerator implements ObjectsGenerator<Car> {
         random = new Random();
     }
 
-    /*@Override
-    public List<Car> generate(int length) {
-        return new CustomArrayList<>(
-                Stream.generate(() -> Car.builder()
-                        .brand(pick(brands)).model(pick(models))
-                        .year(pickYear(1980, 2026))
-                        .build())
-                .limit(length)
-                .toList());
-    }*/
-
     @Override
     public void generate(List<Car> targetList, int length) {
         // Генерируем объекты напрямую в предоставленный список
@@ -48,7 +36,6 @@ public class CarsGenerator implements ObjectsGenerator<Car> {
             .limit(length)
             .forEach(targetList::add); // Просто добавляем элементы в наш список
     }
-
 
     private String pick(List<String> values){
         return values.get(random.nextInt(values.size()));

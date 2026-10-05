@@ -38,7 +38,6 @@ public class MainMenu extends Menu {
             System.out.printf("%d. %s\n", i + 1, commands[i].getDescription());
         }
 
-
         System.out.printf("\n%d. Выход%n", CODE_EXIT);
         System.out.print("\nВыберите пункт меню: ");
     }

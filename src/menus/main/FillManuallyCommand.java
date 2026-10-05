@@ -2,7 +2,6 @@ package menus.main;
 
 import menus.HandleFillingCars;
 import menus.Menu;
-
 import java.util.Scanner;
 
 public class FillManuallyCommand implements MenuCommand {

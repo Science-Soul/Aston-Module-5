@@ -1,7 +1,6 @@
 package menus;
 
 import car.Car;
-
 import java.util.Scanner;
 import java.util.stream.IntStream;
 

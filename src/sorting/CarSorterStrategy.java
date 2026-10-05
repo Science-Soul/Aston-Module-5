@@ -24,5 +24,4 @@ public class CarSorterStrategy {  //класс-контекст, хранит st
         }
         strategy.sort(cars);
     }
-
 }

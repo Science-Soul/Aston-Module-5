@@ -15,6 +15,4 @@ public enum SortType { // enum фабрика стратегий ОПЦИОНА�
             case BY_YEAR_EVEN_ONLY -> new SortByYearEvenOnly();
         };
     }
-
-
 }

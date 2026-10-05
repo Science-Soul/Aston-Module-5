@@ -8,5 +8,4 @@ public class SortByModel implements CarSortStrategy { // класс компар
     public void sort(CustomArrayList<Car> cars) {
         SortAlgo.insertionSort(cars, (a, b) -> a.getModel().compareToIgnoreCase(b.getModel()));
     }
-
 }

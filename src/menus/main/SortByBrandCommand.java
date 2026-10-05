@@ -1,7 +1,5 @@
 package menus.main;
 
-import menus.Menu;
-import sorting.CarSorterStrategy;
 import sorting.SortType;
 
 public class SortByBrandCommand extends SortCommand {

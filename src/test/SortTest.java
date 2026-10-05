@@ -91,6 +91,4 @@ public class SortTest {
         cars.add(Car.builder().brand("Kia").model("Rio").year(2022).build());
         return cars;
     }
-
-
 }
