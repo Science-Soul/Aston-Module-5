@@ -50,7 +50,7 @@ public class Car implements Serializable, JsonSerializable {
 
     @Override
     public String toString() {
-        return "Машина: {" +
+        return "\nМашина: {" +
                 "Бренд: " + brand +
                 ", Модель: " + model +
                 ", Год: " + year +

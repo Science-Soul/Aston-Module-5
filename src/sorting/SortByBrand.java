@@ -8,5 +8,4 @@ public class SortByBrand implements CarSortStrategy {  // класс компа�
     public void sort(CustomArrayList<Car> cars) {
         SortAlgo.insertionSort(cars, (a, b) -> a.getBrand().compareToIgnoreCase(b.getBrand()));
     }
-
 }
