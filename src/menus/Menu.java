@@ -35,7 +35,7 @@ public abstract class Menu {
                 result = Integer.parseInt(input);
             } catch (Exception ignored) {
                 error = true;
-                printWarn("Это не число!");
+                printWarn("Ошибка ввода!");
                 printEnter();
             }
         } while (error);

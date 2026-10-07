@@ -20,7 +20,7 @@ public class FillFromFileCommand implements MenuCommand {
         System.out.printf("Введите путь к файлу (%d - отмена): ", menu.CODE_EXIT);
         String path = menu.getStringAnswer(scanner);
         if (path.equals(String.valueOf(menu.CODE_EXIT))) return;
-        CustomArrayList<Car> list = File.read(CustomArrayList.class, path).orElse(null);
+        CustomArrayList<Car> list = File.read(CustomArrayList.class, path).orElse(Menu.cars);
         if (list != null) {
             System.out.println(list);
         }
